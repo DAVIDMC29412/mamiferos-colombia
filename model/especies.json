@@ -1,0 +1,282 @@
+[
+ {
+  "id": "ardilla_andina",
+  "nombre": "Ardilla andina",
+  "cientifico": "Sciurus pucheranii",
+  "endemica": true,
+  "uicn": "DD"
+ },
+ {
+  "id": "ardilla_colirroja",
+  "nombre": "Ardilla colirroja",
+  "cientifico": "Sciurus granatensis",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "armadillo",
+  "nombre": "Armadillo",
+  "cientifico": "Dasypus novemcinctus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "armadillo_coletrapo",
+  "nombre": "Armadillo coletrapo",
+  "cientifico": "Cabassous sp.",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "capuchino_cariblanco",
+  "nombre": "Capuchino cariblanco",
+  "cientifico": "Cebus capucinus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "capuchino_santa_marta",
+  "nombre": "Capuchino de Santa Marta",
+  "cientifico": "Cebus malitiosus",
+  "endemica": true,
+  "uicn": "EN"
+ },
+ {
+  "id": "chiguiro",
+  "nombre": "Chigüiro",
+  "cientifico": "Hydrochoerus hydrochaeris",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "chucha_comun",
+  "nombre": "Chucha común",
+  "cientifico": "Didelphis marsupialis",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "curi",
+  "nombre": "Curí",
+  "cientifico": "Cavia aperea",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "danta",
+  "nombre": "Danta",
+  "cientifico": "Tapirus terrestris",
+  "endemica": false,
+  "uicn": "VU"
+ },
+ {
+  "id": "gato_domestico_feral",
+  "nombre": "Gato doméstico o feral",
+  "cientifico": "Felis catus",
+  "endemica": false,
+  "uicn": ""
+ },
+ {
+  "id": "guagua_lapa",
+  "nombre": "Guagua / lapa",
+  "cientifico": "Cuniculus paca",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "jaguar",
+  "nombre": "Jaguar",
+  "cientifico": "Panthera onca",
+  "endemica": false,
+  "uicn": "NT"
+ },
+ {
+  "id": "mapache_cangrejero",
+  "nombre": "Mapache cangrejero",
+  "cientifico": "Procyon cancrivorus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "mico_cariblanco",
+  "nombre": "Mico cariblanco",
+  "cientifico": "Cebus versicolor",
+  "endemica": true,
+  "uicn": "EN"
+ },
+ {
+  "id": "mico_maicero",
+  "nombre": "Mico maicero",
+  "cientifico": "Sapajus apella",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "mono_ardilla",
+  "nombre": "Mono ardilla",
+  "cientifico": "Saimiri cassiquiarensis",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "mono_ardilla_ecuatoriano",
+  "nombre": "Mono ardilla ecuatoriano",
+  "cientifico": "Saimiri macrodon",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "mono_aullador_rojo",
+  "nombre": "Mono aullador rojo",
+  "cientifico": "Alouatta seniculus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "mono_churuco",
+  "nombre": "Mono churuco",
+  "cientifico": "Lagothrix lagothricha",
+  "endemica": false,
+  "uicn": "VU"
+ },
+ {
+  "id": "murcielagos",
+  "nombre": "Murciélagos",
+  "cientifico": "Chiroptera",
+  "endemica": false,
+  "uicn": ""
+ },
+ {
+  "id": "neque",
+  "nombre": "Ñeque",
+  "cientifico": "Dasyprocta punctata",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "neque_negro",
+  "nombre": "Ñeque negro",
+  "cientifico": "Dasyprocta fuliginosa",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "ocelote",
+  "nombre": "Ocelote",
+  "cientifico": "Leopardus pardalis",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "oso_de_anteojos",
+  "nombre": "Oso de anteojos",
+  "cientifico": "Tremarctos ornatus",
+  "endemica": false,
+  "uicn": "VU"
+ },
+ {
+  "id": "oso_palmero",
+  "nombre": "Oso palmero",
+  "cientifico": "Myrmecophaga tridactyla",
+  "endemica": false,
+  "uicn": "VU"
+ },
+ {
+  "id": "pecari_labiado",
+  "nombre": "Pecarí labiado",
+  "cientifico": "Tayassu pecari",
+  "endemica": false,
+  "uicn": "VU"
+ },
+ {
+  "id": "perezoso_dos_dedos",
+  "nombre": "Perezoso de dos dedos",
+  "cientifico": "Choloepus hoffmanni",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "perezoso_tres_dedos",
+  "nombre": "Perezoso de tres dedos",
+  "cientifico": "Bradypus variegatus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "perro_de_monte",
+  "nombre": "Perro de monte",
+  "cientifico": "Potos flavus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "perro_domestico_feral",
+  "nombre": "Perro doméstico o feral",
+  "cientifico": "Canis lupus familiaris",
+  "endemica": false,
+  "uicn": ""
+ },
+ {
+  "id": "puma",
+  "nombre": "Puma",
+  "cientifico": "Puma concolor",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "tamandua",
+  "nombre": "Tamandúa",
+  "cientifico": "Tamandua mexicana",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "tamandua_sureno",
+  "nombre": "Tamandúa sureño",
+  "cientifico": "Tamandua tetradactyla",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "titi_cabeciblanco",
+  "nombre": "Tití cabeciblanco",
+  "cientifico": "Saguinus oedipus",
+  "endemica": true,
+  "uicn": "CR"
+ },
+ {
+  "id": "titi_gris",
+  "nombre": "Tití gris",
+  "cientifico": "Saguinus leucopus",
+  "endemica": true,
+  "uicn": "VU"
+ },
+ {
+  "id": "ulama",
+  "nombre": "Ulamá",
+  "cientifico": "Eira barbara",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "venado_cola_blanca",
+  "nombre": "Venado cola blanca",
+  "cientifico": "Odocoileus virginianus",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "zaino",
+  "nombre": "Zaino",
+  "cientifico": "Pecari tajacu",
+  "endemica": false,
+  "uicn": "LC"
+ },
+ {
+  "id": "zorro_perruno",
+  "nombre": "Zorro perruno",
+  "cientifico": "Cerdocyon thous",
+  "endemica": false,
+  "uicn": "LC"
+ }
+]

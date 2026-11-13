@@ -1,0 +1,40 @@
+0	ardilla_andina	Ardilla andina	Sciurus pucheranii
+1	ardilla_colirroja	Ardilla colirroja	Sciurus granatensis
+2	armadillo	Armadillo	Dasypus novemcinctus
+3	armadillo_coletrapo	Armadillo coletrapo	Cabassous sp.
+4	capuchino_cariblanco	Capuchino cariblanco	Cebus capucinus
+5	capuchino_santa_marta	Capuchino de Santa Marta	Cebus malitiosus
+6	chiguiro	Chigüiro	Hydrochoerus hydrochaeris
+7	chucha_comun	Chucha común	Didelphis marsupialis
+8	curi	Curí	Cavia aperea
+9	danta	Danta	Tapirus terrestris
+10	gato_domestico_feral	Gato doméstico o feral	Felis catus
+11	guagua_lapa	Guagua / lapa	Cuniculus paca
+12	jaguar	Jaguar	Panthera onca
+13	mapache_cangrejero	Mapache cangrejero	Procyon cancrivorus
+14	mico_cariblanco	Mico cariblanco	Cebus versicolor
+15	mico_maicero	Mico maicero	Sapajus apella
+16	mono_ardilla	Mono ardilla	Saimiri cassiquiarensis
+17	mono_ardilla_ecuatoriano	Mono ardilla ecuatoriano	Saimiri macrodon
+18	mono_aullador_rojo	Mono aullador rojo	Alouatta seniculus
+19	mono_churuco	Mono churuco	Lagothrix lagothricha
+20	murcielagos	Murciélagos	Chiroptera
+21	neque	Ñeque	Dasyprocta punctata
+22	neque_negro	Ñeque negro	Dasyprocta fuliginosa
+23	ocelote	Ocelote	Leopardus pardalis
+24	oso_de_anteojos	Oso de anteojos	Tremarctos ornatus
+25	oso_palmero	Oso palmero	Myrmecophaga tridactyla
+26	pecari_labiado	Pecarí labiado	Tayassu pecari
+27	perezoso_dos_dedos	Perezoso de dos dedos	Choloepus hoffmanni
+28	perezoso_tres_dedos	Perezoso de tres dedos	Bradypus variegatus
+29	perro_de_monte	Perro de monte	Potos flavus
+30	perro_domestico_feral	Perro doméstico o feral	Canis lupus familiaris
+31	puma	Puma	Puma concolor
+32	tamandua	Tamandúa	Tamandua mexicana
+33	tamandua_sureno	Tamandúa sureño	Tamandua tetradactyla
+34	titi_cabeciblanco	Tití cabeciblanco	Saguinus oedipus
+35	titi_gris	Tití gris	Saguinus leucopus
+36	ulama	Ulamá	Eira barbara
+37	venado_cola_blanca	Venado cola blanca	Odocoileus virginianus
+38	zaino	Zaino	Pecari tajacu
+39	zorro_perruno	Zorro perruno	Cerdocyon thous
