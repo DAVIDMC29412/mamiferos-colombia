@@ -2,7 +2,7 @@
 
 App Android que identifica **40 especies de mamíferos colombianos** en fotos de cámaras trampa, **en segundos y sin internet**. Propuesta dirigida a **Cortolima** (Corporación Autónoma Regional del Tolima) para apoyar el monitoreo de fauna.
 
-**🎬 Video del pitch:** ENLACE_DEL_VIDEO
+**🎬 Video del pitch:** [ENLACE_DEL_VIDEO](https://youtu.be/DHvGiZ_09CQ?si=p8rPq33GGn0Fi8Zy)
 **📱 Descargar la app (APK):** [Releases](https://github.com/DAVIDMC29412/mamiferos-colombia/releases)
 
 ## Integrantes
