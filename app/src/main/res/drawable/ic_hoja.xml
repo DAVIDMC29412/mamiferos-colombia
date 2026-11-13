@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hoja blanca centrada en el área segura del ícono adaptable (108 dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <group android:translateX="30" android:translateY="30">
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M44,4C26,4 8,14 6,34c-0.4,4 0.6,7 1.5,9l3-3c7,-10 15,-16 24,-20c-8,6 -15,13 -20,22l-2,4c2,0.6 4,1 6,1C38,47 46,30 44,4z" />
+    </group>
+</vector>

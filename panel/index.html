@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de revisión · Mamíferos de Colombia</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root { --verde:#24452F; --verde2:#EEF3EC; --naranja:#C7741B; --rojo:#B3261E; --gris:#5A6B5F; --borde:#D5DED5; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:#F7F9F6; color:#1B2A21; }
+  header { background:var(--verde); color:#fff; padding:14px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:20px; margin:0; flex:1; }
+  header .quien { font-size:13px; opacity:.85; }
+  button, select, input { font:inherit; }
+  button { border:0; border-radius:8px; padding:8px 14px; cursor:pointer; background:var(--verde); color:#fff; }
+  button.sec { background:#fff; color:var(--verde); border:1px solid var(--verde); }
+  button.ok { background:var(--verde); } button.no { background:var(--rojo); }
+  main { max-width:1300px; margin:0 auto; padding:16px; }
+  .login { max-width:380px; margin:60px auto; background:#fff; padding:24px; border-radius:14px; border:1px solid var(--borde); display:grid; gap:10px; }
+  .login input { padding:10px; border:1px solid var(--borde); border-radius:8px; }
+  .resumen { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:14px; }
+  .dato { background:#fff; border:1px solid var(--borde); border-radius:12px; padding:12px; }
+  .dato b { display:block; font-size:26px; color:var(--verde); }
+  .dato span { font-size:13px; color:var(--gris); }
+  .filtros { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+  .filtros select, .filtros input { padding:8px; border:1px solid var(--borde); border-radius:8px; background:#fff; }
+  #mapa { height:320px; border-radius:12px; border:1px solid var(--borde); margin-bottom:14px; }
+  .grilla { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+  .tarjeta { background:#fff; border:1px solid var(--borde); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .tarjeta img { width:100%; height:200px; object-fit:cover; background:var(--verde2); cursor:zoom-in; }
+  .cuerpo { padding:12px; display:grid; gap:4px; font-size:14px; }
+  .cuerpo h3 { margin:0; color:var(--verde); font-size:17px; }
+  .chip { display:inline-block; padding:2px 8px; border-radius:20px; font-size:12px; font-weight:600; }
+  .c-pend { background:#eee; color:var(--gris); } .c-val { background:#e0efe3; color:var(--verde); } .c-rec { background:#f8e1df; color:var(--rojo); }
+  .c-nueva { background:#f8ead9; color:var(--naranja); }
+  .meta { color:var(--gris); font-size:13px; }
+  .acciones { display:flex; gap:6px; flex-wrap:wrap; padding:0 12px 12px; }
+  .acciones select { flex:1; min-width:0; padding:6px; border:1px solid var(--borde); border-radius:8px; }
+  .vacio { color:var(--gris); padding:30px; text-align:center; }
+  #zoom { position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:2000; }
+  #zoom img { max-width:95vw; max-height:95vh; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mamíferos de Colombia · Panel de revisión</h1>
+  <span class="quien" id="quien"></span>
+  <button class="sec" id="salir" hidden>Salir</button>
+</header>
+
+<main>
+  <section class="login" id="login">
+    <h2 style="margin:0;color:var(--verde)">Entrar</h2>
+    <p class="meta" style="margin:0">Los revisores (ustedes o Cortolima) entran con su correo para validar fotos. Cualquier persona puede entrar solo a ver.</p>
+    <input id="correo" type="email" placeholder="Correo del revisor" autocomplete="username">
+    <input id="clave" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button id="entrar">Entrar como revisor</button>
+    <button class="sec" id="ver">Solo ver las fotos</button>
+    <div id="errorLogin" class="meta" style="color:var(--rojo)"></div>
+  </section>
+
+  <section id="app" hidden>
+    <div class="resumen" id="resumen"></div>
+    <div id="mapa"></div>
+    <div class="filtros">
+      <select id="fVal"><option value="">Toda validación</option><option value="pendiente">Por revisar</option><option value="validada">Validadas</option><option value="rechazada">Rechazadas</option></select>
+      <select id="fTipo"><option value="">Toda respuesta</option><option value="sin_revisar">Sin respuesta del usuario</option><option value="confirmada">Confirmada</option><option value="corregida">Corregida</option><option value="nueva">Especie nueva</option></select>
+      <select id="fEquipo"><option value="">Todos los equipos</option></select>
+      <input id="fTexto" placeholder="Buscar especie, departamento, observador…">
+      <button class="sec" id="recargar">Recargar</button>
+      <button id="csv">Descargar validadas (ZIP para reentrenar)</button>
+    </div>
+    <div class="grilla" id="grilla"></div>
+  </section>
+</main>
+<div id="zoom"><img alt=""></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, limit, getDocs, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { firebaseConfig } from "./config.js";
+
+const ESPECIES = [["ardilla_andina", "Ardilla andina"], ["ardilla_colirroja", "Ardilla colirroja"], ["armadillo", "Armadillo"], ["armadillo_coletrapo", "Armadillo coletrapo"], ["capuchino_cariblanco", "Capuchino cariblanco"], ["capuchino_santa_marta", "Capuchino de Santa Marta"], ["chiguiro", "Chigüiro"], ["chucha_comun", "Chucha común"], ["curi", "Curí"], ["danta", "Danta"], ["gato_domestico_feral", "Gato doméstico o feral"], ["guagua_lapa", "Guagua / lapa"], ["jaguar", "Jaguar"], ["mapache_cangrejero", "Mapache cangrejero"], ["mico_cariblanco", "Mico cariblanco"], ["mico_maicero", "Mico maicero"], ["mono_ardilla", "Mono ardilla"], ["mono_ardilla_ecuatoriano", "Mono ardilla ecuatoriano"], ["mono_aullador_rojo", "Mono aullador rojo"], ["mono_churuco", "Mono churuco"], ["murcielagos", "Murciélagos"], ["neque", "Ñeque"], ["neque_negro", "Ñeque negro"], ["ocelote", "Ocelote"], ["oso_de_anteojos", "Oso de anteojos"], ["oso_palmero", "Oso palmero"], ["pecari_labiado", "Pecarí labiado"], ["perezoso_dos_dedos", "Perezoso de dos dedos"], ["perezoso_tres_dedos", "Perezoso de tres dedos"], ["perro_de_monte", "Perro de monte"], ["perro_domestico_feral", "Perro doméstico o feral"], ["puma", "Puma"], ["tamandua", "Tamandúa"], ["tamandua_sureno", "Tamandúa sureño"], ["titi_cabeciblanco", "Tití cabeciblanco"], ["titi_gris", "Tití gris"], ["ulama", "Ulamá"], ["venado_cola_blanca", "Venado cola blanca"], ["zaino", "Zaino"], ["zorro_perruno", "Zorro perruno"]];
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app), db = getFirestore(app);
+const $ = (id) => document.getElementById(id);
+let DATOS = [], esRevisor = false, mapa = null, capa = null;
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = (p) => (p == null ? "—" : (p * 100).toFixed(1).replace(".", ",") + " %");
+const fecha = (t) => (t?.toDate ? t.toDate().toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short" }) : "—");
+const nombreFinal = (r) => r.especieValidada || r.especieUsuarioNombre || r.especieModeloNombre || "—";
+
+$("entrar").onclick = async () => {
+  $("errorLogin").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("correo").value.trim(), $("clave").value); }
+  catch (e) { $("errorLogin").textContent = "No se pudo entrar: revise el correo y la contraseña."; }
+};
+$("ver").onclick = () => signInAnonymously(auth).catch((e) => ($("errorLogin").textContent = e.message));
+$("salir").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, async (u) => {
+  $("login").hidden = !!u; $("app").hidden = !u; $("salir").hidden = !u;
+  if (!u) { $("quien").textContent = ""; return; }
+  esRevisor = !u.isAnonymous && (await getDoc(doc(db, "revisores", u.uid))).exists();
+  $("quien").textContent = u.isAnonymous ? "Modo solo lectura" : (u.email + (esRevisor ? " · revisor" : " · sin permiso de revisor"));
+  cargar();
+});
+
+async function cargar() {
+  $("grilla").innerHTML = '<div class="vacio">Cargando…</div>';
+  const snap = await getDocs(query(collection(db, "registros"), orderBy("fecha", "desc"), limit(1000)));
+  DATOS = snap.docs.map((d) => ({ _id: d.id, ...d.data() }));
+  const equipos = [...new Set(DATOS.map((r) => r.dispositivo).filter(Boolean))].sort();
+  $("fEquipo").innerHTML = '<option value="">Todos los equipos</option>' + equipos.map((e) => `<option>${esc(e)}</option>`).join("");
+  pintar();
+}
+
+function filtrados() {
+  const v = $("fVal").value, t = $("fTipo").value, e = $("fEquipo").value, q = $("fTexto").value.toLowerCase().trim();
+  return DATOS.filter((r) =>
+    (!v || (r.validacion || "pendiente") === v) && (!t || r.tipoRespuesta === t) && (!e || r.dispositivo === e) &&
+    (!q || [nombreFinal(r), r.especieModeloNombre, r.nuevaComun, r.nuevaCientifica, r.departamento, r.observador].join(" ").toLowerCase().includes(q)));
+}
+
+function pintar() {
+  const L = filtrados();
+  const total = DATOS.length, porRevisar = DATOS.filter((r) => (r.validacion || "pendiente") === "pendiente").length;
+  const validadas = DATOS.filter((r) => r.validacion === "validada").length, nuevas = DATOS.filter((r) => r.tipoRespuesta === "nueva").length;
+  const equipos = new Set(DATOS.map((r) => r.idInstalacion)).size;
+  $("resumen").innerHTML = [[total, "fotos subidas"], [porRevisar, "por revisar"], [validadas, "validadas"], [nuevas, "especies nuevas propuestas"], [equipos, "equipos distintos"]]
+    .map(([n, t]) => `<div class="dato"><b>${n}</b><span>${t}</span></div>`).join("");
+
+  // Mapa
+  if (!mapa) {
+    mapa = L_.map("mapa").setView([4.4, -75.2], 6);
+    L_.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(mapa);
+    capa = L_.layerGroup().addTo(mapa);
+  }
+  capa.clearLayers();
+  L.filter((r) => r.latitud != null && r.longitud != null).forEach((r) =>
+    L_.circleMarker([r.latitud, r.longitud], { radius: 7, color: "#24452F", fillColor: "#C7741B", fillOpacity: 0.85, weight: 2 })
+      .bindPopup(`<b>${esc(nombreFinal(r))}</b><br>${esc(fecha(r.fecha))}<br>${esc(r.dispositivo)}`).addTo(capa));
+
+  // Tarjetas
+  if (!L.length) { $("grilla").innerHTML = '<div class="vacio">No hay fotos con esos filtros.</div>'; return; }
+  $("grilla").innerHTML = L.map((r) => {
+    const val = r.validacion || "pendiente";
+    const chip = val === "validada" ? '<span class="chip c-val">Validada</span>' : val === "rechazada" ? '<span class="chip c-rec">Rechazada</span>' : '<span class="chip c-pend">Por revisar</span>';
+    const resp = r.tipoRespuesta === "nueva"
+      ? `<span class="chip c-nueva">Especie nueva</span> ${esc(r.nuevaComun)}${r.nuevaCientifica ? ` (<i>${esc(r.nuevaCientifica)}</i>)` : ""}`
+      : r.tipoRespuesta === "confirmada" ? `Confirmó: ${esc(r.especieUsuarioNombre)}`
+      : r.tipoRespuesta === "corregida" ? `Corrigió a: <b>${esc(r.especieUsuarioNombre)}</b>` : "El usuario no respondió";
+    const top = (r.top3 || []).map((o) => `${esc(o.nombre)} ${pct(o.p)}`).join(" · ");
+    const sugerida = r.especieValidadaId || r.especieUsuario || r.especieModelo || "";
+    const acciones = esRevisor ? `<div class="acciones">
+        <select data-id="${esc(r._id)}" class="selEsp">${ESPECIES.map(([id, n]) => `<option value="${id}" ${id === sugerida ? "selected" : ""}>${esc(n)}</option>`).join("")}
+          <option value="__nueva__" ${r.tipoRespuesta === "nueva" && !r.especieValidadaId ? "selected" : ""}>Especie nueva: ${esc(r.nuevaComun || "(escribir)")}</option></select>
+        <button class="ok" data-accion="validar" data-id="${esc(r._id)}">Validar</button>
+        <button class="no" data-accion="rechazar" data-id="${esc(r._id)}">Rechazar</button></div>` : "";
+    return `<div class="tarjeta">
+      <img src="${r.miniatura ? "data:image/jpeg;base64," + r.miniatura : ""}" data-id="${esc(r._id)}" alt="${esc(nombreFinal(r))}" loading="lazy">
+      <div class="cuerpo">
+        <div>${chip}</div>
+        <h3>${esc(nombreFinal(r))}</h3>
+        <div class="meta">Modelo: ${esc(r.especieModeloNombre)} (${pct(r.confianzaModelo)})</div>
+        <div class="meta">Top-3: ${top}</div>
+        <div>${resp}</div>
+        <div class="meta">${esc(r.departamento || "Sin departamento")} · ${r.latitud != null ? `${r.latitud.toFixed(4)}, ${r.longitud.toFixed(4)}` : "sin GPS"}</div>
+        <div class="meta">${esc(r.dispositivo)}${r.observador ? " · " + esc(r.observador) : ""}</div>
+        <div class="meta">${esc(fecha(r.fecha))}</div>
+      </div>${acciones}</div>`;
+  }).join("");
+}
+const L_ = window.L;
+
+$("grilla").addEventListener("click", async (ev) => {
+  const img = ev.target.closest("img");
+  if (img) {
+    // Se muestra la miniatura de inmediato y luego la foto grande (colección "fotos").
+    const z = $("zoom").querySelector("img");
+    z.src = img.src; $("zoom").style.display = "flex";
+    try {
+      const f = await getDoc(doc(db, "fotos", img.dataset.id));
+      if (f.exists()) z.src = "data:image/jpeg;base64," + f.data().datos;
+    } catch (e) { /* se queda la miniatura */ }
+    return;
+  }
+  const b = ev.target.closest("button[data-accion]");
+  if (!b) return;
+  const id = b.dataset.id, r = DATOS.find((x) => x._id === id);
+  const sel = document.querySelector(`select.selEsp[data-id="${CSS.escape(id)}"]`);
+  let cambios;
+  if (b.dataset.accion === "rechazar") {
+    cambios = { validacion: "rechazada" };
+  } else {
+    let idEsp = sel.value, nombre;
+    if (idEsp === "__nueva__") {
+      nombre = prompt("Nombre común de la especie nueva:", r.nuevaComun || "");
+      if (!nombre) return;
+      idEsp = null;
+    } else {
+      nombre = ESPECIES.find(([x]) => x === idEsp)[1];
+    }
+    cambios = { validacion: "validada", especieValidadaId: idEsp, especieValidada: nombre };
+  }
+  b.disabled = true;
+  try {
+    await updateDoc(doc(db, "registros", id), { ...cambios, revisor: auth.currentUser.email, revisadoEn: serverTimestamp() });
+    Object.assign(r, cambios); pintar();
+  } catch (e) { alert("No se pudo guardar: " + e.message); b.disabled = false; }
+});
+$("zoom").onclick = () => ($("zoom").style.display = "none");
+["fVal", "fTipo", "fEquipo"].forEach((id) => ($(id).onchange = pintar));
+$("fTexto").oninput = pintar;
+$("recargar").onclick = cargar;
+
+// ZIP de las fotos validadas: una carpeta por especie (como 04_dataset) + metadata.csv, listo para reentrenar.
+const carpeta = (t) => (t || "sin_nombre").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+$("csv").onclick = async () => {
+  const filas = DATOS.filter((r) => r.validacion === "validada");
+  if (!filas.length) { alert("Todavía no hay fotos validadas."); return; }
+  const boton = $("csv"), texto = boton.textContent;
+  boton.disabled = true;
+  const zip = new JSZip();
+  let n = 0;
+  for (const r of filas) {
+    boton.textContent = `Preparando ${++n} de ${filas.length}…`;
+    try {
+      const f = await getDoc(doc(db, "fotos", r._id));
+      if (!f.exists()) continue;
+      const dir = r.especieValidadaId || "_nuevas/" + carpeta(r.especieValidada);
+      zip.file(`${dir}/${r._id}.jpg`, f.data().datos, { base64: true });
+    } catch (e) { console.warn("No se pudo leer la foto", r._id, e); }
+  }
+  const cols = ["id", "especieValidadaId", "especieValidada", "nuevaCientifica", "especieModelo", "confianzaModelo", "departamento", "latitud", "longitud", "fecha", "dispositivo", "observador"];
+  const val = (r, c) => (c === "fecha" ? (r.fecha?.toDate?.().toISOString() ?? "") : c === "id" ? r._id : r[c] ?? "");
+  const csv = [cols.join(","), ...filas.map((r) => cols.map((c) => `"${String(val(r, c)).replace(/"/g, '""')}"`).join(","))].join("\n");
+  zip.file("metadata.csv", "\ufeff" + csv);
+  const blob = await zip.generateAsync({ type: "blob" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "fotos_validadas.zip"; a.click();
+  boton.disabled = false; boton.textContent = texto;
+};
+</script>
+</body>
+</html>
